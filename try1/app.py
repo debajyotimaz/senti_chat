@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, render_template
 from transformers import BertTokenizer, BertForSequenceClassification
 import torch
 
@@ -28,26 +28,25 @@ def predict(text):
     
     return {"predicted_class": predicted_class, "confidence": confidence}
 
-# Define a route for prediction
-@app.route("/predict", methods=["POST"])
-def predict_route():
-    # Get JSON input from the user
-    data = request.json
-    if "text" not in data:
-        return jsonify({"error": "Missing 'text' in request data"}), 400
+# Define the homepage route
+@app.route("/", methods=["GET", "POST"])
+def home():
+    if request.method == "POST":
+        # Get text input from the form
+        text = request.form.get("text")
+        if not text:
+            result = {"error": "Please enter some text"}
+        else:
+            # Perform prediction
+            result = predict(text)
+        
+        # Render the result on the page
+        return render_template("index.html", text=text, result=result)
     
-    text = data["text"]
-    
-    # Perform prediction
-    result = predict(text)
-    
-    return jsonify(result)
-
-# Define a health check route
-@app.route("/", methods=["GET"])
-def health_check():
-    return jsonify({"message": "BERT model inference API is running!"})
+    # Render the page for GET request
+    return render_template("index.html", text="", result=None)
 
 # Run the Flask app
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
