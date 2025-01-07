@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Llama Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e5ddd5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #075e54;
+        }
+        form {
+            display: flex;
+            margin-top: 10px;
+            align-items: center;
+        }
+        textarea {
+            width: calc(100% - 60px);
+            height: 40px;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            margin-right: 10px;
+            resize: none;
+            font-size: 14px;
+        }
+        button {
+            padding: 0 15px;
+            height: 40px;
+            background-color: #25d366;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .chat-box {
+            padding: 10px;
+            background-color: #efeae2;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .message {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+        .message.bot {
+            justify-content: flex-start;
+        }
+        .bubble {
+            padding: 10px;
+            border-radius: 20px;
+            max-width: 60%;
+            font-size: 14px;
+            position: relative;
+        }
+        .bubble.user {
+            background-color: #dcf8c6;
+            color: black;
+        }
+        .bubble.bot {
+            background-color: #ffffff;
+            color: black;
+        }
+        .bubble::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+        }
+        .bubble.user::before {
+            right: -10px;
+            border-left: 10px solid #dcf8c6;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+        .bubble.bot::before {
+            left: -10px;
+            border-right: 10px solid #ffffff;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Llama Chatbot</h1>
+        <div class="chat-box">
+            {% if history %}
+                {% for message in history %}
+                    <div class="message {{ message.role }}">
+                        <div class="bubble {{ message.role }}">
+                            {{ message.content }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form method="POST">
+            <textarea name="text" placeholder="Type a message"></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</body>
+</html>
