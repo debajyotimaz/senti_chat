@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Llama Chatbot</title>
+    <style>
+        /* Your existing CSS styles */
+    </style>
+    <script>
+        async function sendMessage(event) {
+            event.preventDefault();
+            const textArea = document.querySelector("textarea");
+            const message = textArea.value;
+            textArea.value = "";
+
+            // Update the chat box with the user's message
+            updateChatBox("user", message);
+
+            const response = await fetch("http://localhost:7860/api/predict/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ data: [message] })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                updateChatBox("bot", data.data[0]);
+            } else {
+                console.error("Error:", await response.text());
+            }
+        }
+
+        function updateChatBox(role, content) {
+            const chatBox = document.querySelector(".chat-box");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", role);
+            const bubbleDiv = document.createElement("div");
+            bubbleDiv.classList.add("bubble", role);
+            bubbleDiv.textContent = content;
+            messageDiv.appendChild(bubbleDiv);
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Llama Chatbot</h1>
+        <div class="chat-box">
+            <!-- Chat messages will be dynamically added here -->
+        </div>
+        <form onsubmit="sendMessage(event)">
+            <textarea name="text" placeholder="Type a message"></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</body>
+</html>

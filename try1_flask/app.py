@@ -38,7 +38,7 @@ def get_response(user_input):
     prompt = f"{conversation_prompt}\nUser: {user_input}\nAssistant:"
 
     # Generate a response using the text-generation pipeline
-    response = chat_pipeline(prompt, max_length=512, num_return_sequences=1, temperature=0.7)
+    response = chat_pipeline(prompt, max_length=512, num_return_sequences=1, temperature=1)
     reply = response[0]["generated_text"].split("Assistant:")[-1].strip()
 
     # Append the user input and bot response to chat history
