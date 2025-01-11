@@ -15,20 +15,24 @@ prompt = ChatPromptTemplate.from_template(template)
 model = OllamaLLM(model="llama3.2:1b")
 chain = prompt | model
 
-# Function to detect sentiment and assign an emoji
-def detect_emotion(message):
-    if any(word in message.lower() for word in ["sad", "stressed", "down", "unhappy", "depressed"]):
-        return "😢"
-    elif any(word in message.lower() for word in ["happy", "excited", "great", "fantastic", "joy"]):
+# Function to detect sentiment and assign an emoji using the LLM
+def detect_emotion_llm(message):
+    emotion_prompt = f"The user has sent the following message: \"{message}\". Based on this, classify the emotion as one of the following: happy, sad, angry, love, or neutral."
+    emotion_response = chain.invoke({"history": "", "question": emotion_prompt})
+    
+    # Map the response to emojis
+    if "happy" in emotion_response:
         return "😄"
-    elif any(word in message.lower() for word in ["angry", "mad", "frustrated", "furious"]):
+    elif "sad" in emotion_response:
+        return "😢"
+    elif "angry" in emotion_response:
         return "😡"
-    elif any(word in message.lower() for word in ["love", "like", "enjoy", "adore"]):
+    elif "love" in emotion_response:
         return "😍"
     else:
         return "😐"
 
-# Function to generate responses using the Ollama model
+# Updated respond function to use the new LLM-based emotion detector
 def respond(message, chat_history):
     # Format chat history into a string for the model
     history_str = "\n".join(
@@ -36,8 +40,8 @@ def respond(message, chat_history):
         for entry in chat_history
     )
     
-    # Detect emotion and get emoji
-    emoji = detect_emotion(message)
+    # Detect emotion and get emoji using LLM
+    emoji = detect_emotion_llm(message)
     
     # Generate response using the Ollama model
     response = chain.invoke({"history": history_str, "question": message})  # Add chat history and current message
@@ -48,6 +52,7 @@ def respond(message, chat_history):
     
     time.sleep(2)
     return "", chat_history
+
 
 # Define the Gradio interface
 custom_css = """
