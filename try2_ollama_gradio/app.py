@@ -66,10 +66,13 @@ custom_css = """
         top: 100%;
         transform: translateY(-50%);
     }
+    h1 {
+        text-align: center;
+    }
 """
 
 with gr.Blocks(css=custom_css) as demo:
-    gr.Markdown("<h1>SentiChat</h1>")
+    gr.Markdown("<h1>Sentremo</h1>")
     chatbot = gr.Chatbot(type="messages")
     msg = gr.Textbox(placeholder="Type your message here...")
     clear = gr.ClearButton([msg, chatbot])
