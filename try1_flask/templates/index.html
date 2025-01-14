@@ -10,24 +10,30 @@
             margin: 0;
             padding: 0;
             background-color: #e5ddd5;
+            overflow-x: hidden; /* Prevent horizontal overflow */
         }
+        
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 20px auto;
             padding: 10px;
             background-color: #ffffff;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+            overflow-x: hidden; /* Prevent horizontal overflow */
         }
+        
         h1 {
             text-align: center;
             color: #075e54;
         }
+        
         form {
             display: flex;
             margin-top: 10px;
             align-items: center;
         }
+        
         textarea {
             width: calc(100% - 60px);
             height: 40px;
@@ -37,7 +43,9 @@
             margin-right: 10px;
             resize: none;
             font-size: 14px;
+            box-sizing: border-box; /* Prevents overflow */
         }
+        
         button {
             padding: 0 15px;
             height: 40px;
@@ -47,51 +55,73 @@
             border-radius: 20px;
             cursor: pointer;
         }
+        
         .chat-box {
             padding: 10px;
             background-color: #efeae2;
             border-radius: 10px;
             max-height: 400px;
             overflow-y: auto;
+            overflow-x: hidden; /* Prevent horizontal overflow */
         }
+        
         .message {
             display: flex;
             margin-bottom: 10px;
+            position: relative;
         }
+        
         .message.user {
             justify-content: flex-end;
         }
+        
         .message.bot {
             justify-content: flex-start;
         }
+        
         .bubble {
             padding: 10px 15px;
-            border-radius: 20px;
-            max-width: 60%;
+            border-radius: 12px;
+            max-width: calc(60% - 20px); /* Ensures the bubble and emoji fit within the container */
             font-size: 14px;
             background-color: #d4f3d2;
             color: black;
             box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.2);
             position: relative;
+            word-wrap: break-word; /* Breaks long words to avoid overflow */
         }
+        
         .bubble.user {
             background-color: #d4f3d2;
         }
+        
         .bubble.bot {
             background-color: #ffffff;
         }
+        
+        .reaction {
+            position: absolute;
+            bottom: -10px; /* Adjust this to move the emoji closer or farther from the bubble */
+            right: -10px;  /* Moves the emoji outside of the bubble */
+            font-size: 20px;
+            max-width: 30px;  /* Limits the size of the emoji to avoid overflow */
+            clip-path: inset(0 0 0 0);  /* Ensures it stays within the bounds of the parent element */
+        }    
+        
     </style>
-    
 </head>
 <body>
     <div class="container">
-        <h1>Senti Chatbot</h1>
+        <h1>SENTREMO</h1>
         <div class="chat-box">
             {% if history %}
                 {% for message in history %}
                     <div class="message {{ 'user' if message.role == 'user' else 'bot' }}">
                         <div class="bubble {{ 'user' if message.role == 'user' else 'bot' }}">
                             {{ message.content | safe }}
+                            {% if 'emoji' in message %}
+                                <div class="reaction">{{ message.emoji }}</div>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

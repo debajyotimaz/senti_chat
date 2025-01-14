@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template
 from ollama import chat
 
 app = Flask(__name__)
@@ -57,8 +57,8 @@ def index():
             emoji = detect_emotion_llm(user_input)
             # Generate response using the Ollama model with chat history
             response = run_ollama_llm_with_history(user_input)
-            # Append emoji to user message
-            messages[-2]['content'] += f" {emoji}"
+            # Append emoji as a reaction to user message
+            messages[-2]['emoji'] = emoji
     
     return render_template('index.html', history=messages)
 
