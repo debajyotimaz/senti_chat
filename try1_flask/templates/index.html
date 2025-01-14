@@ -113,7 +113,7 @@
 <body>
     <div class="container">
         <h1>SENTREMO</h1>
-        <div class="chat-box">
+        <div class="chat-box" id="chat-box">
             {% if history %}
                 {% for message in history %}
                     <div class="message {{ 'user' if message.role == 'user' else 'bot' }}">
@@ -127,10 +127,40 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <form method="POST">
-            <textarea name="text" placeholder="Type a message"></textarea>
+        <form method="POST" id="chat-form">
+            <textarea name="text" id="text-input" placeholder="Type a message"></textarea>
             <button type="submit">Send</button>
         </form>
     </div>
+
+    <script>
+        // Get references to the chat box and textarea
+        const chatBox = document.getElementById('chat-box');
+        const form = document.getElementById('chat-form');
+        const textInput = document.getElementById('text-input');
+
+        // Scroll the chat box to the bottom
+        function scrollToBottom() {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Add an event listener for form submission
+        form.addEventListener('submit', function() {
+            setTimeout(scrollToBottom, 200);  // Delay scrolling to bottom after message is added
+        });
+
+        // Add event listener for keydown to handle Shift+Enter and Enter
+        textInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                if (!event.shiftKey) {
+                    event.preventDefault();
+                    form.submit();
+                }
+            }
+        });
+
+        // Ensure chat box scrolls to bottom on page load and after new messages are added
+        window.onload = scrollToBottom;
+    </script>
 </body>
 </html>
