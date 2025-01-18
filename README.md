@@ -1,49 +1,102 @@
-# Sentremo chatbot
+# 🫂 Sentremo Chatbot
 
 Sentremo is an emotion-aware chatbot designed to improve the current emotional condition of the user. It detects the sentiment of user input and generates an appropriate emoji to suggest the sentiment. 
 
 This repository contains different approaches to developing Sentremo using various tools and frameworks.
 
-## Directory Structure
+## ✨ Features
 
-- **try1_flask/**
-  - This directory contains the implementation of Sentremo using Flask.
-  - Files:
-    - `app.py`: The main Flask application file.
-    - `templates/`: Directory containing HTML templates for the Flask application.
-    - `README.md`: Instructions and details specific to the Flask implementation.
-   
-- **try2_ollama_gradio/**
-  - This directory contains the implementation of Sentremo using Gradio.
-  - Files:
-    - `app_cli.py`: The main CLI application file for the Gradio implementation.
-    - `README.md`: Instructions and details specific to the Gradio implementation.
+### Core Capabilities
 
-- **README.md**
-  - The main README file providing an overview of the project and directory structure.
+- **🎯 Emotion Detection**
+  - Real-time sentiment analysis of user input
+  - Context-aware emotional understanding
 
-## Features
+- **💝 Emotional Support**
+  - Personalized empathetic responses
+  - Mood improvement strategies
+  - Adaptive conversation flow
 
-- **Emotion Detection**: Sentremo can detect the emotional state of the user based on their input.
-- **Emotion Improvement**: The chatbot aims to improve the user's emotional condition through empathetic responses.
-- **Emoji Generation**: Sentremo generates an emoji that suggests the sentiment of the user's current input, enhancing the conversational experience.
+- **😊 Dynamic Emoji Integration**
+  - Context-appropriate emoji suggestions
+  - Enhanced emotional expression
+    
 
-## Getting Started
+## 📂 Project Structure
+
+```
+sentremo/
+├── try1_flask/
+│   ├── app.py              # Flask application core
+│   ├── templates/          # HTML template files
+│   └── README.md          # Flask implementation guide
+│
+├── try2_ollama_gradio/
+│   ├── app_cli.py         # Gradio CLI application
+│   └── README.md          # Gradio implementation guide
+│
+└── README.md              # Main documentation providing an overview of the project and directory structure.
+```
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Python 3.8 or later
-- Flask (for the Flask implementation)
-- Gradio (for the Gradio implementation)
+- Python 3.8+
+- pip package manager
+
+### Required Dependencies
+
+```bash
+pip install flask gradio torch transformers
+```
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the Repository**
    ```bash
    git clone https://github.com/yourusername/sentremo.git
+   cd sentremo
    ```
-   
-   
-### Contributing
 
-Contributions are welcome! Please fork the repository and create a pull request with your changes.
+2. **Set Up Virtual Environment** (Recommended)
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## 💡 Usage
+
+### Flask Implementation
+```bash
+cd try1_flask
+python app.py
+```
+Then navigate to `http://localhost:5000` in your browser.
+
+### Gradio Implementation
+```bash
+cd try2_ollama_gradio
+python app_cli.py
+```
+   
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<div align="center">
+
+Made with ❤️ by the Sentremo Team
+
+</div>
