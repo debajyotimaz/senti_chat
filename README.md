@@ -4,6 +4,10 @@ Sentremo is an emotion-aware chatbot designed to improve the current emotional c
 
 This repository contains different approaches to developing Sentremo using various tools and frameworks.
 
+## ⌛ Pending
+
+- Upload button for multimodal chat.
+
 ## ✨ Features
 
 ### Core Capabilities
