@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTREMO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4 40%, #fad0c4);
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            max-width: 700px;
+            width: 100%;
+            height: 100vh;
+            padding: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #075e54;
+            margin-bottom: 10px;
+        }
+
+        .chat-box {
+            flex: 1;
+            padding: 10px;
+            background-color: #efeae2;
+            border-radius: 10px;
+            max-height: calc(100% - 100px);
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        form {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        textarea {
+            flex: 1;
+            height: 40px;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            margin-right: 10px;
+            resize: none;
+            font-size: 14px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            overflow-y: hidden;
+        }
+
+        button {
+            padding: 0 15px;
+            height: 40px;
+            background-color: #25d366;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .btn-upload {
+            border: none;
+            color: white;
+            background-color:rgb(183, 211, 230);
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-upload img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+
+        button:hover {
+            background-color: #1da851;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .bubble {
+            padding: 10px 15px;
+            border-radius: 12px;
+            max-width: 60%;
+            font-size: 14px;
+            background-color: #d4f3d2;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .bubble.user {
+            background-color: #d4f3d2;
+        }
+
+        .bubble.bot {
+            background-color: #ffffff;
+        }
+
+        .reaction {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            font-size: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(10px); }
+            to { transform: translateY(0); }
+        }
+
+        .typing-indicator {
+            font-size: 14px;
+            color: #666;
+            margin-left: 10px;
+        }
+
+        .send-icon {
+            width: 20px;
+            height: 20px;
+            background: url('https://img.icons8.com/ios-filled/50/ffffff/chat-bubble.png') no-repeat center;
+            background-size: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SENTREMO</h1>
+        <div class="chat-box" id="chat-box">
+            {% if history %}
+                {% for message in history %}
+                    <div class="message {{ 'user' if message.role == 'user' else 'bot' }}">
+                        <div class="bubble {{ 'user' if message.role == 'user' else 'bot' }}">
+                            {{ message.content | safe }}
+                            {% if 'emoji' in message %}
+                                <div class="reaction">{{ message.emoji }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form id="chat-form" method="POST" enctype="multipart/form-data" onsubmit="submitForm(event)">
+            <div class="upload-btn-wrapper">
+                <button class="btn-upload"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtoBXZpxKk0a6QlEOj_jyTMIP9X8NVbdia8g&s" alt="Upload"></button>
+                <input type="file" name="file" id="file-upload">
+            </div>
+            <textarea name="text" placeholder="Type a message" onkeydown="handleKeyDown(event)"></textarea>
+            <button type="submit" class="btn-submit">
+                <img src="https://img.icons8.com/ios-filled/24/ffffff/paper-plane.png" alt="Send">
+            </button>
+        </form>
+    </div>
+    <script>
+        const typingIndicator = document.getElementById('typing-indicator');
+        let typingTimeout;
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const textarea = document.querySelector('textarea');
+            textarea.focus();  // Focus on the textarea on page load
+
+            // Scroll to the bottom of the chat box on load
+            const chatBox = document.querySelector('#chat-box');
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'block';
+            clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                typingIndicator.style.display = 'none';
+            }, 1000);
+        }
+
+
+        function submitForm(event) {
+            event.preventDefault();
+            const form = document.querySelector('#chat-form');
+            const formData = new FormData(form);
+            const chatBox = document.querySelector('#chat-box');
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.userMessage) {
+                        const userMessage = document.createElement('div');
+                        userMessage.classList.add('message', 'user');
+                        userMessage.innerHTML = `
+                            <div class="bubble user">
+                                ${data.userMessage}
+                                <div class="reaction">${data.emoji || ''}</div>
+                            </div>
+                        `;
+                        chatBox.appendChild(userMessage);
+                    }
+
+                    if (data.botMessage) {
+                        const botMessage = document.createElement('div');
+                        botMessage.classList.add('message', 'bot');
+                        botMessage.innerHTML = `
+                            <div class="bubble bot">${data.botMessage}</div>
+                        `;
+                        chatBox.appendChild(botMessage);
+                    }
+
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    form.reset();
+                });
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                document.querySelector('#chat-form').submit();
+            }
+        }
+    </script>
+</body>
+</html>
