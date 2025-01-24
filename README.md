@@ -7,6 +7,7 @@ This repository contains different approaches to developing Sentremo using vario
 ## ⌛ Pending
 
 - Upload button for multimodal chat.
+- Meters for temparature, max output tokens, top p.
 
 ## ✨ Features
 
