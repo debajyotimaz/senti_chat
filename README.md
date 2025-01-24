@@ -1,5 +1,5 @@
 # 🫂 SENTREMO Chatbot
-**If this repository is useful to you, please give us a star ⭐ on Github.**
+**If this repository is useful to you, please give us a star ⭐.**
 
 
 Sentremo is an emotion-aware chatbot designed to improve the current emotional condition of the user. It detects the sentiment of user input and generates an appropriate emoji to suggest the sentiment. 
