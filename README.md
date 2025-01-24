@@ -8,6 +8,8 @@ This repository contains different approaches to developing Sentremo using vario
 
 - Upload button for multimodal chat.
 - Meters for temparature, max output tokens, top p.
+- ![image](https://github.com/user-attachments/assets/10116be5-5997-4c86-8490-5a313ae45b06)
+
 
 ## ✨ Features
 
